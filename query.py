@@ -28,7 +28,8 @@ if __name__ == '__main__':
     op=webdriver.ChromeOptions()
     # op.add_argument('headless')
     op.add_experimental_option("excludeSwitches", ["enable-logging"])
-    data = urlencode({"Mode":"MOD", "STNO":studentid, "QUERY_TYPE": "3"})
+    data = urlencode({"Mode":"MOD", "STNO":studentid, "QUERY_TYPE": "3"})#歷年成績
+    data1 = urlencode({"Mode":"MOD", "STNO":studentid, "QUERY_TYPE": "1", "QUERY_VALUE":"1091"})
     headers = {
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36 Edg/87.0.664.75',
@@ -48,7 +49,10 @@ if __name__ == '__main__':
         soup = BeautifulSoup(req.text, 'lxml')
         __viewstate = quote(soup.find(id = '__VIEWSTATE')['value'])
         __EVENTVALIDATION = quote(soup.find(id = '__EVENTVALIDATION')['value'])
-        script = "ScriptManager1=AjaxPanel%7CReQuery&__EVENTTARGET=ReQuery&__EVENTARGUMENT=&__CRYSTALSTATECrystalReportViewer=&__VIEWSTATE="+__viewstate+"&__VIEWSTATEGENERATOR=&__VIEWSTATEENCRYPTED=&__EVENTVALIDATION="+__EVENTVALIDATION+"&ActivePageControl=&ColumnFilter=&QUERY_TYPE=3&QUERY_VALUE=&STNO="+studentid+"&STUDY_STATUS=01&ASYS_CODE=0&DEGREE_CODE=0&COLLEGE_CODE=0160&FACULTY_CODE=0162&TEACH_GRP=0507&__ASYNCPOST=true&"
+        __VIEWSTATEGENERATOR = quote(soup.find(id = '__VIEWSTATEGENERATOR')['value'])
+        __CRYSTALSTATECrystalReportViewer = quote(soup.find(id = '__CRYSTALSTATECrystalReportViewer')['value'])
+        script  = f"ScriptManager1=AjaxPanel%7CReQuery&__EVENTTARGET=ReQuery&__EVENTARGUMENT=&__CRYSTALSTATECrystalReportViewer=&__VIEWSTATE={__viewstate}&__VIEWSTATEGENERATOR=&__VIEWSTATEENCRYPTED=&__EVENTVALIDATION={__EVENTVALIDATION}&ActivePageControl=&ColumnFilter=&QUERY_TYPE=3&STNO=&STUDY_STATUS=01&ASYS_CODE=0&DEGREE_CODE=0&COLLEGE_CODE=0160&FACULTY_CODE=0162&TEACH_GRP=0507&__ASYNCPOST=true&"
+        script1 = f"ScriptManager1=AjaxPanel%7CReQuery&__EVENTTARGET=ReQuery&__EVENTARGUMENT=&__CRYSTALSTATECrystalReportViewer=&__VIEWSTATE={__viewstate}&__VIEWSTATEGENERATOR=&__VIEWSTATEENCRYPTED=&__EVENTVALIDATION={__EVENTVALIDATION}&ActivePageControl=&ColumnFilter=&QUERY_TYPE=1&QUERY_VALUE=1091&STNO=&STUDY_STATUS=01&ASYS_CODE=0&DEGREE_CODE=0&COLLEGE_CODE=0160&FACULTY_CODE=0162&TEACH_GRP=0507&IS_MOMENT=True&__ASYNCPOST=true&"
         req.close()
         req = session.post("https://ais.ntou.edu.tw/Application/GRD/GRD50/GRD5010_02.aspx",data = script, headers = headers)
         soup = BeautifulSoup(req.text, 'lxml')
